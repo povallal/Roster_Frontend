@@ -1,0 +1,104 @@
+
+.login-container {
+    background-color: #242B3C;
+    color: #ffffff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+  }
+  #text1 {
+    color: #ffffff;
+    font-size: 62px; 
+    font-family: "Rubik Mono One";
+    font-weight: bolder;
+    line-height: 50px;
+    text-align: center;
+    max-width: 300px;
+    width: 80%;
+    margin: 0px;
+  }
+  #text2 {
+    color: #ffffff;
+    font-size: 29px;
+    font-family: "Montserrat";
+    line-height: 26px;
+    text-align: center;
+    max-width:  300px;
+    width: 80%;
+    margin-bottom: 2px;
+  }
+  
+  
+  .login-form {
+    width: 80%;
+    max-width: 300px;
+    padding: 20px;
+    background-color: #242B3C;;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  input[type="text"]{
+    top: 406px;
+    left: 595px;
+    width: 100%;
+    height: 34px;
+    padding: 8px 8px;
+    border: 0;
+    box-sizing: border-box;
+    border-radius: 9px;
+    background-color: #364153;
+    color: #ffffff;
+    font-size: 14px;
+    font-family: "Open Sans";
+    line-height: 12px;
+    outline: none;
+    margin-bottom: 8px;
+  }
+
+  input[type="password"]  {
+
+    top: 450px;
+    left: 594px;
+    width: 100%;
+    height: 34px;
+    padding: 8px 8px;
+    border: 0;
+    box-sizing: border-box;
+    border-radius: 9px;
+    background-color: #364153;
+    color: #ffffff;
+    font-size: 14
+    px;
+    font-family: "Open Sans";
+    line-height: 15px;
+    outline: none;
+    margin-top: 8px;
+    margin-bottom: 8px;
+  }
+  
+  button {
+    cursor: pointer;
+    top: 508px;
+    left: 594px;
+    width: 100%;
+    height: 42px;
+    padding: 0px 8px;
+    border: 0;
+    box-sizing: border-box;
+    border-radius: 6px;
+    background-color: #b33945;
+    color: #ffffff;
+    font-size: 19px;
+    font-family: "Open Sans";
+    font-weight: 700;
+    line-height: 24px;
+    outline: none;
+  }
+  
+  button:hover {
+    background-color: rgba(6, 235, 151, 0.373);
+  }
+  

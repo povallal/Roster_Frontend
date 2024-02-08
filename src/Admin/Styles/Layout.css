@@ -1,0 +1,11 @@
+/* Layout Styles */
+.layout {
+    display: flex;
+    height: 100vh !important;
+  }
+  
+  .content {
+    flex-grow: 1;
+    
+  }
+  
