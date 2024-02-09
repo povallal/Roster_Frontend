@@ -1,19 +1,30 @@
 import React from "react";
 import Layout from "../Layout";
 import { FaPlus, FaEllipsisV, FaEdit, FaTrash } from "react-icons/fa";
-import { useState } from "react";
+import { useState,useEffect } from "react";
+import axios from "axios";
+import { variables } from "../apiConfig";
 
 const ConfigureMOGroup = () => {
- // Dummy data for the table
- const moGroups = [
-    { id: "1", name: "MO Group 1", chiefConsultantName: "Consultant 1" },
-    { id: "2", name: "MO Group 2", chiefConsultantName: "Consultant 2" },
-    { id: "3", name: "MO Group 3", chiefConsultantName: "Consultant 3" },
-    // Add more dummy data as needed
- ];
+
 
  // State for modal visibility
  const [showModal, setShowModal] = useState(false);
+ const [groups,setGroups]= useState([]);
+
+
+ useEffect(() => {
+  const fetchUnits = async () => {
+    try {
+      const response = await axios.get(variables.API_URL +"groups");
+      setGroups(response.data);
+    } catch (error) {
+      console.error("Error fetching units:", error);
+    }
+  };
+
+  fetchUnits();
+}, []);
 
  // Function to handle the click event of the Add button
  const handleAddButtonClick = () => {
@@ -54,16 +65,21 @@ const ConfigureMOGroup = () => {
           <tr>
             <th>Group ID</th>
             <th>Group Name</th>
-            <th>Chief Consultant Name</th>
+             <th>Created At</th>
+              <th>Updated At</th>
+            <th>Unit Name</th>
             <th>Actions</th>
           </tr>
         </thead>
         <tbody>
-          {moGroups.map((moGroup) => (
-            <tr key={moGroup.id}>
-              <td>{moGroup.id}</td>
-              <td>{moGroup.name}</td>
-              <td>{moGroup.chiefConsultantName}</td>
+          {groups.map((group) => (
+            <tr key={group.Id}>
+
+              <td>{group.Id}</td>
+              <td>{group.Name}</td>
+              <td>{new Date(group.CreatedAt).toLocaleDateString()}</td>
+              <td>{new Date(group.UpdatedAt).toLocaleDateString()}</td>
+              <td>{group.UnitName}</td>
               <td>
                 <div className="dropdown">
                  <button className="btn btn-outline-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">

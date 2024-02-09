@@ -1,42 +1,38 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Layout from "../Layout";
 import { FaPlus, FaEllipsisV, FaEdit, FaTrash, FaBan } from "react-icons/fa";
-import { useState } from "react";
-
+import axios from "axios";
+import { variables } from "../apiConfig";
 
 const ChiefConsulant = () => {
- // Dummy data for the table
- const consultants = [
-    { id: "EDX", name: "Consultant 1", phoneno: "0772497273", email: "edx@gmail.com" },
-    { id: "RMX", name: "Consultant 2", phoneno: "0772497273", email: "edx@gmail.com" },
-    { id: "ZSQ", name: "Consultant 3", phoneno: "0772497273", email: "edx@gmail.com" },
-    // Add more dummy data as needed
- ];
+  const [chiefConsultants, setChiefConsultants] = useState([]);
+  const [showModal, setShowModal] = useState(false);
 
- // State to manage expanded details
- const [expandedId, setExpandedId] = useState(null);
+  useEffect(() => {
+    fetchChiefConsultants();
+  }, []);
 
- // Toggle expanded details for a specific row
- const toggleExpand = (id) => {
-    setExpandedId((prevId) => (prevId === id ? null : id));
- };
+  const fetchChiefConsultants = async () => {
+    try {
+      const response = await axios.get(variables.API_URL +"chief-consultants/chief-consultants");
+      setChiefConsultants(response.data);
+      
+    } catch (error) {
+      console.error("Error fetching chief consultants:", error);
+    }
+  };
 
- // State for modal visibility
- const [showModal, setShowModal] = useState(false);
+  
 
- // Function to render the actions dropdown
- const renderActionsDropdown = (id) => {
+  const renderActionsDropdown = (Id) => {
+
+   // console.log("Users Id",Id);
     return (
       <div className="dropdown">
         <button className="btn btn-outline-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
           Actions
         </button>
         <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton">
-          <li>
-            <button className="dropdown-item" onClick={() => toggleExpand(id)}>
-              Details
-            </button>
-          </li>
           <li>
             <button className="dropdown-item">
               <FaEdit /> Edit
@@ -55,29 +51,27 @@ const ChiefConsulant = () => {
         </ul>
       </div>
     );
- };
-
- // Function to handle the click event of the Add button
- const handleAddButtonClick = () => {
-   setShowModal(true);
- };
-
- // Function to handle the submission of the form
- const handleFormSubmit = (e) => {
-    e.preventDefault();
- 
-    // Get the form data from the event
-    const formData = new FormData(e.target);
- 
-    // Do something with the form data (e.g., send it to an API)
-    console.log("Form data:", Object.fromEntries(formData.entries()));
- 
-    // Close the modal
-    setShowModal(false);
   };
- 
 
- return (
+  const handleAddButtonClick = () => {
+    setShowModal(true);
+  };
+   // Function to handle the submission of the form
+ const handleFormSubmit = (e) => {
+  e.preventDefault();
+
+  // Get the form data from the event
+  const formData = new FormData(e.target);
+
+  // Do something with the form data (e.g., send it to an API)
+  console.log("Form data:", Object.fromEntries(formData.entries()));
+
+  // Close the modal
+  setShowModal(false);
+};
+
+
+  return (
     <Layout>
       {/* Navbar */}
       <nav className="navbar navbar-light bg-light">
@@ -98,38 +92,27 @@ const ChiefConsulant = () => {
       <table className="table mt-3">
         <thead>
           <tr>
-            <th>ID</th>
-            <th>Name</th>
-            <th>PhoneNo</th>
+            <th>Username</th>
             <th>Email</th>
+            <th>Created At</th>
+            <th>Updated At</th>
+            <th>Active</th>
+            <th>Unit Name</th>
             <th>Actions</th>
           </tr>
         </thead>
         <tbody>
-          {consultants.map((consultant) => (
-            <React.Fragment key={consultant.id}>
-              {/* Main row with basic details */}
-              <tr>
-                <td>{consultant.id}</td>
-                <td>{consultant.name}</td>
-                <td>{consultant.phoneno}</td>
-                <td>{consultant.email}</td>
-                <td>{renderActionsDropdown(consultant.id)}</td>
-              </tr>
-
-              {/* Expanded row with additional details */}
-              {expandedId === consultant.id && (
-                <tr>
-                 <td colSpan="5">
-                    {/* Additional details go here */}
-                    <div>
-                      <strong>Additional Details:</strong>
-                      {/* Add more details here */}
-                    </div>
-                 </td>
-                </tr>
-              )}
-            </React.Fragment>
+          {chiefConsultants.map((consultant) => (
+            <tr key={consultant.Id}>
+              
+              <td>{consultant.UserName}</td>
+              <td>{consultant.Email}</td>
+              <td>{new Date(consultant.CreatedAt).toLocaleDateString()}</td>
+              <td>{new Date(consultant.UpdatedAt).toLocaleDateString()}</td>
+              <td>{consultant.IsActive ? "Yes" : "No"}</td>
+              <td>{consultant.UnitName}</td>
+              <td>{renderActionsDropdown(consultant.Id)}</td>
+            </tr>
           ))}
         </tbody>
       </table>
@@ -193,8 +176,9 @@ const ChiefConsulant = () => {
           </div>
         </div>
       )}
+
     </Layout>
- );
+  );
 };
 
 export default ChiefConsulant;

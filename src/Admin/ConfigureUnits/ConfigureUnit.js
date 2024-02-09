@@ -1,18 +1,47 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Layout from "../Layout";
 import { FaPlus, FaEllipsisV, FaEdit, FaTrash } from "react-icons/fa";
-import { useState } from "react";
+import axios from "axios";
+import { variables } from "../apiConfig";
+
 
 const ConfigureUnit = () => {
- // Dummy data for the table
- const units = [
-    { id: "EDX", name: "Unit 1", chiefConsultantName: "Consultant 1" },
-    { id: "RMX", name: "Unit 2", chiefConsultantName: "Consultant 2" },
-    { id: "ZSQ", name: "Unit 3", chiefConsultantName: "Consultant 3" },
-    // Add more dummy data as needed
- ];
 
- // State for modal visibility
+  const [units, setUnits] = useState([]);
+
+
+  useEffect(() => {
+    const fetchUnits = async () => {
+      try {
+        const response = await axios.get(variables.API_URL +"units");
+        setUnits(response.data);
+      } catch (error) {
+        console.error("Error fetching units:", error);
+      }
+    };
+
+    fetchUnits();
+  }, []);
+
+
+
+
+  const renderActionsDropdown = (Id) => {
+   // console.log("Unit Id",Id)
+          return(
+        <div className="dropdown">
+        <button className="btn btn-outline-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+          Actions
+        </button>
+        <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton">
+          <li><a className="dropdown-item" href="#"><FaEdit /> Edit</a></li>
+          <li><a className="dropdown-item" href="#"><FaTrash /> Delete</a></li>
+        </ul>
+      </div>
+          )
+  }
+
+   // State for modal visibility
  const [showModal, setShowModal] = useState(false);
 
  // Function to handle the click event of the Add button
@@ -34,9 +63,8 @@ const ConfigureUnit = () => {
     setShowModal(false);
  };
 
- return (
 
-
+  return (
     <Layout>
       {/* Navbar */}
       <nav className="navbar navbar-light bg-light">
@@ -53,30 +81,30 @@ const ConfigureUnit = () => {
       {/* Table */}
       <table className="table mt-3">
         <thead>
-          <tr>
-            <th>Unit ID</th>
-            <th>Unit Name</th>
-            <th>Chief Consultant Name</th>
-            <th>Actions</th>
-          </tr>
+         <tr>
+              <th>ID</th>
+              <th>Unit Name</th>
+              <th>Created At</th>
+              <th>Updated At</th>
+              <th>Chief Consultant</th>
+              <th>Actions</th>
+            </tr>
         </thead>
         <tbody>
           {units.map((unit) => (
-            <tr key={unit.id}>
-              <td>{unit.id}</td>
-              <td>{unit.name}</td>
-              <td>{unit.chiefConsultantName}</td>
+            <tr key={unit.Id}>
+            
+                <td>{unit.Id}</td>
+                <td>{unit.Name}</td>
+                <td>{new Date(unit.CreatedAt).toLocaleDateString()}</td>
+                <td>{new Date(unit.UpdatedAt).toLocaleDateString()}</td>
+                <td>{unit.ChiefConsultantName}</td>
+                <td>{renderActionsDropdown(unit.Id)}</td>
+
               <td>
-              <div className="dropdown">
-                 <button className="btn btn-outline-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
-                    Actions
-                 </button>
-                 <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                    <li><a className="dropdown-item" href="#"><FaEdit /> Edit</a></li>
-                    <li><a className="dropdown-item" href="#"><FaTrash /> Delete</a></li>
-                 </ul>
-                </div>
+            
               </td>
+
             </tr>
           ))}
         </tbody>
@@ -118,6 +146,8 @@ const ConfigureUnit = () => {
           </div>
         </div>
       )}
+
+
     </Layout>
  );
 };

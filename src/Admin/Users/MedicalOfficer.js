@@ -1,31 +1,40 @@
 import React from "react";
 import Layout from "../Layout";
 import { FaPlus, FaEllipsisV, FaEdit, FaTrash, FaBan } from "react-icons/fa";
-import { useState } from "react";
-
+import { useState ,useEffect} from "react";
+import axios from "axios";
+import { variables } from "../apiConfig";
 
 const MedicalOfficer = () => {
- // Dummy data for the table
- const consultants = [
-    { id: "EDX", name: "Consultant 1", phoneno: "0772497273", email: "edx@gmail.com" ,unit :"ICC1",group:1},
-    { id: "RMX", name: "Consultant 2", phoneno: "0772497273", email: "edx@gmail.com",unit :"ICC2" ,group:2},
-    { id: "ZSQ", name: "Consultant 3", phoneno: "0772497273", email: "edx@gmail.com",unit :"ICC3" ,group:3},
-    // Add more dummy data as needed
- ];
+  const[consultants,setConsultants] =useState([]);
 
+  useEffect(() => {
+    fetchConsultants();
+  }, []);
+  
+  const fetchConsultants = async () => {
+    try {
+      const response = await axios.get(variables.API_URL +"medical-officers/medical-officers");
+      setConsultants(response.data);
+      
+    } catch (error) {
+      console.error("Error fetching chief consultants:", error);
+    }
+  };
+  
  // State to manage expanded details
  const [expandedId, setExpandedId] = useState(null);
 
  // Toggle expanded details for a specific row
- const toggleExpand = (id) => {
-    setExpandedId((prevId) => (prevId === id ? null : id));
+ const toggleExpand = (Id) => {
+    setExpandedId((prevId) => (prevId === Id ? null : Id));
  };
 
  // State for modal visibility
  const [showModal, setShowModal] = useState(false);
 
  // Function to render the actions dropdown
- const renderActionsDropdown = (id) => {
+ const renderActionsDropdown = (Id) => {
     return (
       <div className="dropdown">
         <button className="btn btn-outline-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
@@ -33,7 +42,7 @@ const MedicalOfficer = () => {
         </button>
         <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton">
           <li>
-            <button className="dropdown-item" onClick={() => toggleExpand(id)}>
+            <button className="dropdown-item" onClick={() => toggleExpand(Id)}>
               Details
             </button>
           </li>
@@ -98,32 +107,33 @@ const MedicalOfficer = () => {
       <table className="table mt-3">
         <thead>
           <tr>
-            <th>ID</th>
-            <th>Name</th>
-            <th>PhoneNo</th>
+          <th>Username</th>
             <th>Email</th>
-            <th>Unit</th>
-            <th>Group</th>
+            <th>Created At</th>
+            <th>Updated At</th>
+            <th>Active</th>
+            <th>Unit Name</th>
             <th>Actions</th>
             
           </tr>
         </thead>
         <tbody>
           {consultants.map((consultant) => (
-            <React.Fragment key={consultant.id}>
+            <React.Fragment key={consultant.Id}>
               {/* Main row with basic details */}
-              <tr>
-                <td>{consultant.id}</td>
-                <td>{consultant.name}</td>
-                <td>{consultant.phoneno}</td>
-                <td>{consultant.email}</td>
-                <td>{consultant.unit}</td>
-                <td>{consultant.group}</td>
-                <td>{renderActionsDropdown(consultant.id)}</td>
+              <tr key={consultant.Id}>
+
+              <td>{consultant.UserName}</td>
+                <td>{consultant.Email}</td>
+                <td>{new Date(consultant.CreatedAt).toLocaleDateString()}</td>
+                <td>{new Date(consultant.UpdatedAt).toLocaleDateString()}</td>
+               <td>{consultant.IsActive ? "Yes" : "No"}</td>
+                <td>{consultant.UnitName}</td>
+                <td>{renderActionsDropdown(consultant.Id)}</td>
               </tr>
 
               {/* Expanded row with additional details */}
-              {expandedId === consultant.id && (
+              {expandedId === consultant.Id && (
                 <tr>
                  <td colSpan="5">
                     {/* Additional details go here */}
