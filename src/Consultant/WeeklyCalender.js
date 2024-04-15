@@ -10,37 +10,23 @@ import { startOfDay, addHours } from "date-fns";// Import the CSS Module
 
 const localizer = momentLocalizer(moment);
 
-const events = [
-    {
-      start: new Date(),
-      end: addHours(new Date(), 1),
-      title: "Test Event",
-    },
-    {
-      start: new Date(),
-      end: addHours(new Date(), 1),
-      title: "Test Event",
-    },
-    {
-      start: new Date(),
-      end: addHours(new Date(), 1),
-      title: "Test Event",
-    },
-    // add more events
-  ]
+
+
+
 
 const WeeklyCalendar = () => {
   return (
-        <div className="calendar-styles"> 
+      <div className="calendar-styles"> 
       <Calendar
         localizer={localizer}
         selectable
         defaultView="week"
-        // events={events}
-        views={{ month: true, week: true, day: true }}
+        
+      
+         views={{ month: true, week: true, day: true }}
         step={60*12}
         timeslots={1}
-        showMultiDayTimes
+         showMultiDayTimes
         defaultDate={new Date()}
       />
     </div>

@@ -40,6 +40,7 @@ const Navbaradmin = () => {
         break;
       case "allshifts":
         setOpenAllShift(!openAllShift);
+         break;
       default:
         break;
     }
@@ -129,8 +130,8 @@ const Navbaradmin = () => {
         </li>
         
         <li className={`nav-item ${openAllShift ? "open" : ""}`}>
-          <Link className="nav-link" to='/all-shifts' onClick={() => toggleMenu("allshifts")}>
-            <FaFileAlt /> Shifts
+          <Link className="nav-link" to='/admin-dashboard' onClick={() => toggleMenu("allshifts")}>
+            <FaFileAlt /> Today Shifts
           </Link>
         </li>
       </ul>

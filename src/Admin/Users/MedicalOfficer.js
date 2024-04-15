@@ -7,20 +7,37 @@ import { variables } from "../apiConfig";
 
 const MedicalOfficer = () => {
   const[consultants,setConsultants] =useState([]);
+  const [groups, setGroups] = useState([]);
+  const [formData,setFormData]= useState([]);
 
   useEffect(() => {
-    fetchConsultants();
+    fetchGroups();
+    fetchMedicalOfficers();
   }, []);
   
-  const fetchConsultants = async () => {
+
+  const fetchMedicalOfficers= async () => {
     try {
-      const response = await axios.get(variables.API_URL +"medical-officers/medical-officers");
+      const response = await axios.get(variables.API_URL +"medical-officers/all-medical-officers");
       setConsultants(response.data);
       
     } catch (error) {
       console.error("Error fetching chief consultants:", error);
     }
   };
+
+
+   // Fetch units data from backend and update the state
+   const fetchGroups = async () => {
+    try {
+        const response = await fetch(variables.API_URL +"groups/all-groups");
+        const data = await response.json();
+        setGroups(data);
+      //  console.log("Groups",data);
+    } catch (error) {
+        console.error("Error fetching units:", error);
+    }
+};
   
  // State to manage expanded details
  const [expandedId, setExpandedId] = useState(null);
@@ -71,20 +88,47 @@ const MedicalOfficer = () => {
    setShowModal(true);
  };
 
+ 
+
  // Function to handle the submission of the form
- const handleFormSubmit = (e) => {
+ const handleFormSubmit = async (e) => {
     e.preventDefault();
  
     // Get the form data from the event
     const formData = new FormData(e.target);
- 
-    // Do something with the form data (e.g., send it to an API)
-    console.log("Form data:", Object.fromEntries(formData.entries()));
- 
-    // Close the modal
-    setShowModal(false);
+
+    const formObject = {};
+    formData.forEach((value, key) => {
+        formObject[key] = value;
+    });
+    
+    console.log("form object ",formObject);
+
+   
+            try {
+              // Make an HTTP POST request to your backend API endpoint
+              const  response = await axios.post(variables.API_URL +'account/medical-officer-register', formObject);
+
+              // Check if the request was successful (status code 200-299)
+              if (response.status >= 200 && response.status < 300) {
+                  // Request successful, do something with the response data if needed
+                  console.log('Form submitted successfully:', response.data);
+                  setShowModal(false);
+                  fetchMedicalOfficers();
+              } else {
+                  // Request was not successful, handle error
+                  console.error('Error:', response.statusText);
+                  // Handle error, show error message to the user, etc.
+              }
+          } catch (error) {
+              // An error occurred while making the request (e.g., network error)
+              console.error('Error:', error.message);
+              // Handle error, show error message to the user, etc.
+          }
   };
  
+
+
 
  return (
     <Layout>
@@ -112,7 +156,7 @@ const MedicalOfficer = () => {
             <th>Created At</th>
             <th>Updated At</th>
             <th>Active</th>
-            <th>Unit Name</th>
+            <th>Group Name</th>
             <th>Actions</th>
             
           </tr>
@@ -128,7 +172,7 @@ const MedicalOfficer = () => {
                 <td>{new Date(consultant.CreatedAt).toLocaleDateString()}</td>
                 <td>{new Date(consultant.UpdatedAt).toLocaleDateString()}</td>
                <td>{consultant.IsActive ? "Yes" : "No"}</td>
-                <td>{consultant.UnitName}</td>
+                <td>{consultant.GroupName}</td>
                 <td>{renderActionsDropdown(consultant.Id)}</td>
               </tr>
 
@@ -161,34 +205,40 @@ const MedicalOfficer = () => {
               <div className="modal-body">
                 {/* Add your form for adding chief consultants here */}
                 <form onSubmit={handleFormSubmit}>
-                 <div className="mb-3">
-                    <label htmlFor="name" className="form-label">Name</label>
-                    <input type="text" className="form-control" id="name" name="name" required />
-                 </div>
-                 <div className="mb-3">
-                    <label htmlFor="phone" className="form-label">Phone No</label>
-                    <input type="text" className="form-control" id="phone" name="phone" required />
-                 </div>
-                 <div className="mb-3">
-                    <label htmlFor="email" className="form-label">Email</label>
-                    <input type="email" className="form-control" id="email" name="email" required />
-                 </div>
-                 <div className="mb-3">
-                    <label htmlFor="password" className="form-label">Password</label>
-                    <input type="password" className="form-control" id="password" name="password" required />
-                 </div>
-                 <div className="mb-3">
-                    <label htmlFor="idno" className="form-label">ID No</label>
-                    <input type="text" className="form-control" id="idno" name="idno" required />
-                 </div>
-                 <div className="mb-3">
-                    <label htmlFor="unit" className="form-label">Unit</label>
-                    <input type="text" className="form-control" id="unit" name="unit" required />
-                 </div>
-                 <div className="mb-3">
-                    <label htmlFor="unit" className="form-label">Group</label>
-                    <input type="text" className="form-control" id="group" name="group" required />
-                 </div>
+                      <div className="mb-3">
+                  <label htmlFor="name" className="form-label">Name</label>
+                  <input type="text" className="form-control" id="userName" name="userName" required />
+              </div>
+              <div className="mb-3">
+                  <label htmlFor="email" className="form-label">Email</label>
+                  <input type="email" className="form-control" id="email" name="email" required />
+              </div>
+              <div className="mb-3">
+                  <label htmlFor="password" className="form-label">Password</label>
+                  <input type="password" className="form-control" id="password" name="password" required />
+              </div>
+              <div className="mb-3">
+                  <label htmlFor="confirmPassword" className="form-label">Confirm Password</label>
+                  <input type="password" className="form-control" id="confirmPassword" name="confirmPassword" required />
+              </div>
+              <div className="mb-3 form-check">
+                  <input type="checkbox" className="form-check-input" id="isActive" name="isActive" value="true" />
+                  <label className="form-check-label" htmlFor="isActive">Active</label>
+              </div>
+
+              <div className="mb-3">
+                <label htmlFor="group" className="form-label">Group</label>
+                <select className="form-control" id="group" name="groupId" required >
+                    <option value="">Select Group</option>
+                    {groups.map((group) => (
+            <option key={group.Id} value={group.Id}>{group.Name} </option>
+                ))}
+                </select>
+            </div>
+
+
+
+                    
                  <button type="submit" className="btn btn-primary">Submit</button>
                 </form>
               </div>

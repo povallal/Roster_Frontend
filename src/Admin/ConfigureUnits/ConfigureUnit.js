@@ -11,17 +11,23 @@ const ConfigureUnit = () => {
 
 
   useEffect(() => {
+    fetchUnits();
+
+
+  }, []);
+
+
     const fetchUnits = async () => {
       try {
-        const response = await axios.get(variables.API_URL +"units");
+        const response = await axios.get(variables.API_URL +"units/all-units");
         setUnits(response.data);
       } catch (error) {
         console.error("Error fetching units:", error);
       }
     };
 
-    fetchUnits();
-  }, []);
+   
+
 
 
 
@@ -39,7 +45,7 @@ const ConfigureUnit = () => {
         </ul>
       </div>
           )
-  }
+  };
 
    // State for modal visibility
  const [showModal, setShowModal] = useState(false);
@@ -49,19 +55,39 @@ const ConfigureUnit = () => {
     setShowModal(true);
  };
 
- // Function to handle the submission of the form
- const handleFormSubmit = (e) => {
-    e.preventDefault();
 
-    // Get the form data from the event
-    const formData = new FormData(e.target);
 
-    // Do something with the form data (e.g., send it to an API)
-    console.log("Form data:", Object.fromEntries(formData.entries()));
+ const handleFormSubmit = async (e) => {
+  e.preventDefault();
 
-    // Close the modal
-    setShowModal(false);
- };
+  const formData = new FormData(e.target);
+  const formObject = {};
+  formData.forEach((value, key) => {
+    formObject[key] = value;
+  });
+
+  try {
+    // Make an HTTP POST request to your backend API endpoint
+    const response = await axios.post(variables.API_URL +'units/create', formObject);
+
+    // Check if the request was successful
+    if (response.status === 200) {
+      // Request successful, do something with the response data if needed
+      console.log('Unit created successfully:', response.data);
+      setShowModal(false);
+      fetchUnits();
+    } else {
+      // Request was not successful, handle error
+      console.error('Error:', response.statusText);
+      // Handle error, show error message to the user, etc.
+    }
+  } catch (error) {
+    // An error occurred while making the request
+    console.error('Error:', error.message);
+    // Handle error, show error message to the user, etc.
+  }
+};
+
 
 
   return (
@@ -86,7 +112,7 @@ const ConfigureUnit = () => {
               <th>Unit Name</th>
               <th>Created At</th>
               <th>Updated At</th>
-              <th>Chief Consultant</th>
+              {/* <th>Chief Consultant</th> */}
               <th>Actions</th>
             </tr>
         </thead>
@@ -98,7 +124,7 @@ const ConfigureUnit = () => {
                 <td>{unit.Name}</td>
                 <td>{new Date(unit.CreatedAt).toLocaleDateString()}</td>
                 <td>{new Date(unit.UpdatedAt).toLocaleDateString()}</td>
-                <td>{unit.ChiefConsultantName}</td>
+                {/* <td>{unit.ChiefConsultantName}</td> */}
                 <td>{renderActionsDropdown(unit.Id)}</td>
 
               <td>
@@ -124,19 +150,13 @@ const ConfigureUnit = () => {
                 <form onSubmit={handleFormSubmit}>
                  <div className="mb-3">
                     <label htmlFor="unitName" className="form-label">Unit Name</label>
-                    <input type="text" className="form-control" id="unitName" name="unitName" required />
+                    <input type="text" className="form-control" id="unitName" name="name" required />
                  </div>
-                 <div className="mb-3">
-                    <label htmlFor="unitId" className="form-label">Unit ID</label>
-                    <input type="text" className="form-control" id="unitId" name="unitId" required />
-                 </div>
-                 <div className="mb-3">
-                    <label htmlFor="chiefConsultantName" className="form-label">Chief Consultant Name</label>
-                    <input type="text" className="form-control" id="chiefConsultantName" name="chiefConsultantName" required />
-                 </div>
+                 
                  <button type="submit" className="btn btn-primary">Submit</button>
                 </form>
               </div>
+
               <div className="modal-footer">
                 <button type="button" className="btn btn-secondary" onClick={() => setShowModal(false)}>
                  Close

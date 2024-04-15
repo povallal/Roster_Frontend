@@ -1,0 +1,27 @@
+/* Layout Styles */
+.layout {
+    display: flex;
+   
+  
+   
+    
+    
+  }
+
+  
+  .content {
+    flex-grow: 1;
+    
+  }
+  
+  .child{
+
+    /* background-image: url('../Images/bg1.svg'); */
+        /* background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' version='1.1' xmlns:xlink='http://www.w3.org/1999/xlink' xmlns:svgjs='http://svgjs.dev/svgjs' width='1440' height='560' preserveAspectRatio='none' viewBox='0 0 1440 560'%3e%3cg mask='url(%26quot%3b%23SvgjsMask1364%26quot%3b)' fill='none'%3e%3crect width='1440' height='560' x='0' y='0' fill='url(%26quot%3b%23SvgjsLinearGradient1365%26quot%3b)'%3e%3c/rect%3e%3cpath d='M1440 0L1119.65 0L1440 196.8z' fill='rgba(255%2c 255%2c 255%2c .1)'%3e%3c/path%3e%3cpath d='M1119.65 0L1440 196.8L1440 304.87L858.3400000000001 0z' fill='rgba(255%2c 255%2c 255%2c .075)'%3e%3c/path%3e%3cpath d='M858.3399999999999 0L1440 304.87L1440 446.8L326.7599999999999 0z' fill='rgba(255%2c 255%2c 255%2c .05)'%3e%3c/path%3e%3cpath d='M326.75999999999976 0L1440 446.8L1440 507.28000000000003L135.32999999999976 0z' fill='rgba(255%2c 255%2c 255%2c .025)'%3e%3c/path%3e%3cpath d='M0 560L626.39 560L0 498.28z' fill='rgba(0%2c 0%2c 0%2c .1)'%3e%3c/path%3e%3cpath d='M0 498.28L626.39 560L885.05 560L0 269.90999999999997z' fill='rgba(0%2c 0%2c 0%2c .075)'%3e%3c/path%3e%3cpath d='M0 269.90999999999997L885.05 560L1220.17 560L0 223.19999999999996z' fill='rgba(0%2c 0%2c 0%2c .05)'%3e%3c/path%3e%3cpath d='M0 223.2L1220.17 560L1310.1000000000001 560L0 127.21999999999998z' fill='rgba(0%2c 0%2c 0%2c .025)'%3e%3c/path%3e%3c/g%3e%3cdefs%3e%3cmask id='SvgjsMask1364'%3e%3crect width='1440' height='560' fill='white'%3e%3c/rect%3e%3c/mask%3e%3clinearGradient x1='15.28%25' y1='-39.29%25' x2='84.72%25' y2='139.29%25' gradientUnits='userSpaceOnUse' id='SvgjsLinearGradient1365'%3e%3cstop stop-color='%230e2a47' offset='0'%3e%3c/stop%3e%3cstop stop-color='rgba(0%2c 69%2c 158%2c 0.19)' offset='1'%3e%3c/stop%3e%3c/linearGradient%3e%3c/defs%3e%3c/svg%3e");
+        background-repeat: no-repeat;  
+     */
+    
+        background-size: cover; /* This will cover the entire screen */
+        background-position: center center; 
+
+  }
